@@ -1,14 +1,20 @@
 # Golang-CRUD-App
 
-Components to be added->
+Components completed-->
+
+Creating api, controller and database model packages
 
 Error Handling
 
 Log Handling
 
-Tracing
-
 Use interface properly
+
+Components pending->
+
+create Makefile for lint, test , docker image check
+
+Tracing
 
 Pagination
 
@@ -19,4 +25,6 @@ Dockerisation
 Pod metrics (promotheus/Grafana)
 
 Testing (unit and integration)
+
+Lint checker
 
