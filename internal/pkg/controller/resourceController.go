@@ -9,7 +9,7 @@ type ResourceControllerIntfc interface {
 	GetResource() ([]models.Book, error)
 	CreateResource(book models.Book) (models.Book, error)
 	GetResourceByID(id string) (models.Book, error)
-	UpdateResource(newBook models.Book) (models.Book, error)
+	UpdateResource(id string, newBook models.Book) (models.Book, error)
 	DeleteResource(id string) error
 }
 
@@ -17,7 +17,7 @@ type ResourceController struct {
 	dbResource db.DBHandlerResourceIntfc
 }
 
-func NewController(dbResource db.DBHandler) *ResourceController {
+func NewController(dbResource *db.DBHandler) *ResourceController {
 	return &ResourceController{
 		dbResource: dbResource,
 	}
@@ -50,8 +50,8 @@ func (rsrcController *ResourceController) GetResourceByID(id string) (models.Boo
 	return books, nil
 }
 
-func (rsrcController *ResourceController) UpdateResource(newBook models.Book) (models.Book, error) {
-	books, err := rsrcController.dbResource.Update(newBook)
+func (rsrcController *ResourceController) UpdateResource(id string, newBook models.Book) (models.Book, error) {
+	books, err := rsrcController.dbResource.Update(id, newBook)
 	if err != nil {
 		return models.Book{}, err
 	}

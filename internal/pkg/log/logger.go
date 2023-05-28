@@ -46,6 +46,11 @@ type stackTracer interface {
 
 var logger = NewZapLog(info)
 
+// ConfigureLogger configures logger base on env variables
+func ConfigureLogger() {
+	logger = NewZapLog(level)
+}
+
 // Info logs info level
 func Info(ctx context.Context, args ...interface{}) {
 	logger.Info(ctx, args...)

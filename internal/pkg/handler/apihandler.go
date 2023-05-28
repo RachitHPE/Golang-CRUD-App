@@ -14,9 +14,9 @@ type APIHandler struct {
 }
 
 // NewAPIHandler implements APIHandler.
-func NewAPIHandler(bookResource controller.ResourceController) *APIHandler {
+func NewAPIHandler(bookResource *controller.ResourceController) *APIHandler {
 	return &APIHandler{
-		bookResource: &bookResource,
+		bookResource: bookResource,
 	}
 }
 
@@ -59,14 +59,15 @@ func (handler APIHandler) GetBookByID(ginCtx *gin.Context) {
 }
 
 func (handler APIHandler) UpdateBook(ginCtx *gin.Context) {
-	body := models.Book{}
+	id := ginCtx.Param("id")
 
+	body := models.Book{}
 	if err := ginCtx.BindJSON(&body); err != nil {
 		ginCtx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	result, err := handler.bookResource.UpdateResource(body)
+	result, err := handler.bookResource.UpdateResource(id, body)
 	if err != nil {
 		ginCtx.AbortWithError(http.StatusNotFound, err)
 		return

@@ -14,7 +14,7 @@ type DBHandlerResourceIntfc interface {
 	Get() ([]models.Book, error)
 	Create(book models.Book) (models.Book, error)
 	GetByID(id string) (models.Book, error)
-	Update(newBook models.Book) (models.Book, error)
+	Update(id string, newBook models.Book) (models.Book, error)
 	Delete(id string) error
 }
 
@@ -49,7 +49,7 @@ func Init(dbconf *config.DatabaseConfiguration) *gorm.DB {
 	return db
 }
 
-func (handler DBHandler) Get() ([]models.Book, error) {
+func (handler *DBHandler) Get() ([]models.Book, error) {
 	var books []models.Book
 
 	if result := handler.dbhandler.Find(&books); result.Error != nil {
@@ -59,7 +59,7 @@ func (handler DBHandler) Get() ([]models.Book, error) {
 	return books, nil
 }
 
-func (handler DBHandler) Create(book models.Book) (models.Book, error) {
+func (handler *DBHandler) Create(book models.Book) (models.Book, error) {
 	if result := handler.dbhandler.Create(&book); result.Error != nil {
 		return models.Book{}, fmt.Errorf("error inserting records in database %w", result.Error)
 	}
@@ -67,7 +67,7 @@ func (handler DBHandler) Create(book models.Book) (models.Book, error) {
 	return book, nil
 }
 
-func (handler DBHandler) GetByID(id string) (models.Book, error) {
+func (handler *DBHandler) GetByID(id string) (models.Book, error) {
 	var book models.Book
 
 	if result := handler.dbhandler.First(&book, id); result.Error != nil {
@@ -77,10 +77,10 @@ func (handler DBHandler) GetByID(id string) (models.Book, error) {
 	return book, nil
 }
 
-func (handler DBHandler) Update(newBook models.Book) (models.Book, error) {
+func (handler *DBHandler) Update(id string, newBook models.Book) (models.Book, error) {
 	var book models.Book
 
-	if result := handler.dbhandler.First(&book, newBook.ID); result.Error != nil {
+	if result := handler.dbhandler.First(&book, id); result.Error != nil {
 		return models.Book{}, fmt.Errorf("failed updating book id: %d, Error: %w", newBook.ID, result.Error)
 	}
 
@@ -93,7 +93,7 @@ func (handler DBHandler) Update(newBook models.Book) (models.Book, error) {
 	return book, nil
 }
 
-func (handler DBHandler) Delete(id string) error {
+func (handler *DBHandler) Delete(id string) error {
 	var book models.Book
 
 	if result := handler.dbhandler.First(&book, id); result.Error != nil {
